@@ -1,0 +1,9 @@
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.deps.json
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.dll
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.pdb
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.AssemblyInfoInputs.cache
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.AssemblyInfo.cs
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.dll
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.pdb
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.runtimeconfig.json
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.runtimeconfig.dev.json
