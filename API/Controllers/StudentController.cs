@@ -14,11 +14,11 @@ namespace API.Controllers
     
     public class StudentController : CommonApiController
     {
-
         private readonly IStudentService _studentService;
-        public StudentController(StudentService studentService)
+
+        public StudentController(IStudentService studentService)
         {
-            _studentService = studentService;
+           _studentService = studentService;
         }
 
 
