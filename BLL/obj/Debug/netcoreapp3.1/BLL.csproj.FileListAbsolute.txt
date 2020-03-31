@@ -9,3 +9,5 @@ C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\obj\Debug\netcoreapp3.1\BLL.pd
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\bin\Debug\netcoreapp3.1\DLL.dll
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\bin\Debug\netcoreapp3.1\DLL.pdb
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\obj\Debug\netcoreapp3.1\BLL.csproj.CopyComplete
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\bin\Debug\netcoreapp3.1\Utility.dll
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\BLL\bin\Debug\netcoreapp3.1\Utility.pdb

@@ -15,8 +15,16 @@ namespace BLL
             services.AddTransient<IDepartmentServices, DepartmentServices>();
             services.AddTransient<IStudentService, StudentService>();
 
+
+            AllValidationDependency(services);
+           
+        }
+
+        private static void AllValidationDependency(IServiceCollection services)
+        {
             services.AddTransient<IValidator<DepartmentInsertRequest>, DepartmentInsertRequestValidator>();
             services.AddTransient<IValidator<StudentRequest>, StudentRequestValidator>();
+            services.AddTransient<IValidator<StudentUpdateRequest>, StudentUpdateRequestValidator>();
         }
     }
 }

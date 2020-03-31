@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
+using Utility.Exceptions;
 
 namespace BLL.Services
 {
@@ -13,7 +15,7 @@ namespace BLL.Services
         Task<Student> AddStudentAsync(StudentRequest request);
         Task<List<Student>> GetAllAsync();
         Task<Student> GeatAStudentAsync(string roll);
-        Task<Student> UpdateAsync(string roll, StudentRequest request);
+        Task<Student> UpdateAsync(string roll, StudentUpdateRequest request);
         Task<bool> DeleteAsync(string roll);
 
         Task<bool> IsNameExit(string name);
@@ -36,44 +38,96 @@ namespace BLL.Services
                 Roll = request.Roll,
                 Email = request.Email
             }; 
-            return await _studentRepository.AddStudentAsync(student);
+           await _studentRepository.CreateAsync(student);
+           if (await _studentRepository.ApplicationSaveChanges())
+           {
+               return student;
+           }
+           throw new MyApplicationExceptions("Student Data Not save");
         }
 
         public async Task<bool> DeleteAsync(string roll)
         {
-            return await _studentRepository.DeleteAsync(roll);
+            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            if (student == null)
+            {
+                throw new MyApplicationExceptions("Roll wise Student not found");
+            }
+
+           _studentRepository.DeleteAsync(student);
+           if (await _studentRepository.ApplicationSaveChanges())
+           {
+               return true;
+           }
+
+           return false;
+
         }
 
         public async Task<Student> GeatAStudentAsync(string roll)
         {
-            return await _studentRepository.GeatAStudentAsync(roll);
+            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            if(student == null)
+            {
+                throw new MyApplicationExceptions("Data Not found !!");
+            }
+            return student;
         }
 
         public async Task<List<Student>> GetAllAsync()
         {
-            return await _studentRepository.GetAllAsync();
+            var allStudent = await _studentRepository.GetAllAsync();
+
+             if (allStudent == null)
+             {
+                 throw new MyApplicationExceptions("No found Data");
+             }
+
+             return allStudent;
         }
 
         public async Task<bool> IsNameExit(string name)
         {
-            return await _studentRepository.IsNameExit(name);
+            var student = await _studentRepository.GetAAsync(x => x.Name == name);
+            if (student != null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<bool> IsRollExit(string roll)
         {
-            return await _studentRepository.IsRollExit(roll);
+            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            if (student != null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public async Task<Student> UpdateAsync(string roll, StudentRequest request)
+        public async Task<Student> UpdateAsync(string roll, StudentUpdateRequest request)
         {
-            Student student = new Student()
-            {
-                Name = request.Name,
-                Roll = request.Roll,
-                Email = request.Email
-            };
 
-            return await _studentRepository.UpdateAsync(roll, student);
+            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+
+            if (student == null)
+            {
+                throw new MyApplicationExceptions("No found Data");
+            } 
+
+            student.Name = request.Name;
+            student.Roll = request.Roll;
+            student.Email = request.Email;
+            _studentRepository.UpdateAsync(student);
+           
+
+            if (await _studentRepository.ApplicationSaveChanges())
+            {
+                return student;
+            }
+            throw new MyApplicationExceptions("Student Data Not save");
         }
     }
 

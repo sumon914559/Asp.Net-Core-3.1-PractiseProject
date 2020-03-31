@@ -41,7 +41,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{roll}")]
-        public async Task<ActionResult> Update(string roll,[FromForm]  StudentRequest request)
+        public async Task<ActionResult> Update(string roll,[FromForm]  StudentUpdateRequest request)
         {
             return Ok(await _studentService.UpdateAsync(roll, request));
         }
