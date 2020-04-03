@@ -15,7 +15,7 @@ namespace DLL.UnitOfWork
       void DeleteAsync(T entity);
       Task <T>GetAAsync(Expression<Func<T, bool>> expression = null);
       Task<List<T>> GetAllAsync();
-      Task<bool> ApplicationSaveChanges();
+      
   }
 
   public class RepositoryBase<T> : IRepositoryBase<T> where T : class
@@ -51,11 +51,6 @@ namespace DLL.UnitOfWork
         public void UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
-        }
-
-        public async Task<bool> ApplicationSaveChanges()
-        {
-            return await _context.SaveChangesAsync() > 0? true : false;
         }
 
     }

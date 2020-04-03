@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DLL.UnitOfWork;
 
 namespace DLL
 {
@@ -10,8 +11,10 @@ namespace DLL
     {
         public static void AllDependency(IServiceCollection services)
         {
-            services.AddTransient<IStudentRepository, StudentRepository>();
-            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
+
+            //services.AddTransient<IStudentRepository, StudentRepository>();
+           // services.AddTransient<IDepartmentRepository, DepartmentRepository>();
         }
     }
 }

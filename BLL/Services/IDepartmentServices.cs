@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DLL.UnitOfWork;
 using Microsoft.VisualBasic;
 using Utility.Exceptions;
 
@@ -24,10 +25,11 @@ namespace BLL.Services
 
     public class DepartmentServices: IDepartmentServices
     {
-        private readonly IDepartmentRepository _DepartmentRepository;
-        public DepartmentServices(IDepartmentRepository DepartmentRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DepartmentServices(IUnitOfWork unitOfWork)
         {
-            _DepartmentRepository = DepartmentRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Department> AddDepartmentAsync(DepartmentInsertRequest request)
@@ -38,8 +40,8 @@ namespace BLL.Services
                 Name = request.Name
             };
 
-          await _DepartmentRepository.CreateAsync(department);
-          if (await _DepartmentRepository.ApplicationSaveChanges())
+          await _unitOfWork.DepartmentRepository.CreateAsync(department);
+          if (await _unitOfWork.ApplicationSaveChanges())
           {
               return department;
           }
@@ -49,14 +51,14 @@ namespace BLL.Services
 
         public async Task<bool> DeleteAsync(string code)
         {
-            var department = await _DepartmentRepository.GetAAsync(s => s.Code == code);
+            var department = await _unitOfWork.DepartmentRepository.GetAAsync(s => s.Code == code);
             if (department == null)
             {
                 throw new MyApplicationExceptions("Department Not found!");
-            } 
-            _DepartmentRepository.DeleteAsync(department);
+            }
+            _unitOfWork.DepartmentRepository.DeleteAsync(department);
 
-            if (await _DepartmentRepository.ApplicationSaveChanges())
+            if (await _unitOfWork.ApplicationSaveChanges())
             {
                 return true;
             }
@@ -66,7 +68,7 @@ namespace BLL.Services
 
         public async Task<Department> GetADepartmentAsync(string code)
         {
-            var department =   await _DepartmentRepository.GetAAsync(x=>x.Code ==code);
+            var department =   await _unitOfWork.DepartmentRepository.GetAAsync(x=>x.Code ==code);
            
             if (department == null)
             {
@@ -78,7 +80,7 @@ namespace BLL.Services
 
         public async Task<List<Department>> GetAllDepartmentAsync()
         {
-           var department = await _DepartmentRepository.GetAllAsync();
+           var department = await _unitOfWork.DepartmentRepository.GetAllAsync();
             if (department == null)
             {
                 throw new MyApplicationExceptions("Department Not found!");
@@ -89,7 +91,7 @@ namespace BLL.Services
 
         public async Task<bool> IsCodeExit(string code)
         {
-            var department = await _DepartmentRepository.GetAAsync(x => x.Code == code);
+            var department = await _unitOfWork.DepartmentRepository.GetAAsync(x => x.Code == code);
             if (department != null)
             {
                 return false;
@@ -101,7 +103,7 @@ namespace BLL.Services
 
         public async Task<bool> IsNameExit(string name)
         {
-            var department = await _DepartmentRepository.GetAAsync(x => x.Name == name);
+            var department = await _unitOfWork.DepartmentRepository.GetAAsync(x => x.Name == name);
             if (department != null)
             {
                 return false;
@@ -118,7 +120,7 @@ namespace BLL.Services
             //    Name = request.Name
             //};
 
-            var getADepartmentData = await _DepartmentRepository.GetAAsync(x => x.Code == code);
+            var getADepartmentData = await _unitOfWork.DepartmentRepository.GetAAsync(x => x.Code == code);
            
             if (getADepartmentData == null)
             {
@@ -158,11 +160,11 @@ namespace BLL.Services
             {
                 getADepartmentData.Code = request.Code;
                 getADepartmentData.Name = request.Name;
-                _DepartmentRepository.UpdateAsync(getADepartmentData);
+                _unitOfWork.DepartmentRepository.UpdateAsync(getADepartmentData);
             }
 
 
-            if (await _DepartmentRepository.ApplicationSaveChanges())
+            if (await _unitOfWork.ApplicationSaveChanges())
             {
                 return getADepartmentData;
             }

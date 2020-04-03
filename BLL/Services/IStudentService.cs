@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DLL.UnitOfWork;
 using Microsoft.VisualBasic;
 using Utility.Exceptions;
 
@@ -24,10 +25,11 @@ namespace BLL.Services
 
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
-        public StudentService(IStudentRepository studentRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public StudentService(IUnitOfWork unitOfWork)
         {
-            _studentRepository = studentRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Student> AddStudentAsync(StudentRequest request)
@@ -37,9 +39,9 @@ namespace BLL.Services
                 Name = request.Name,
                 Roll = request.Roll,
                 Email = request.Email
-            }; 
-           await _studentRepository.CreateAsync(student);
-           if (await _studentRepository.ApplicationSaveChanges())
+            };
+            await _unitOfWork.StudentRepository.CreateAsync(student);
+           if (await _unitOfWork.ApplicationSaveChanges())
            {
                return student;
            }
@@ -48,14 +50,14 @@ namespace BLL.Services
 
         public async Task<bool> DeleteAsync(string roll)
         {
-            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            var student = await _unitOfWork.StudentRepository.GetAAsync(x => x.Roll == roll);
             if (student == null)
             {
                 throw new MyApplicationExceptions("Roll wise Student not found");
             }
 
-           _studentRepository.DeleteAsync(student);
-           if (await _studentRepository.ApplicationSaveChanges())
+            _unitOfWork.StudentRepository.DeleteAsync(student);
+           if (await _unitOfWork.ApplicationSaveChanges())
            {
                return true;
            }
@@ -66,7 +68,7 @@ namespace BLL.Services
 
         public async Task<Student> GeatAStudentAsync(string roll)
         {
-            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            var student = await _unitOfWork.StudentRepository.GetAAsync(x => x.Roll == roll);
             if(student == null)
             {
                 throw new MyApplicationExceptions("Data Not found !!");
@@ -76,7 +78,7 @@ namespace BLL.Services
 
         public async Task<List<Student>> GetAllAsync()
         {
-            var allStudent = await _studentRepository.GetAllAsync();
+            var allStudent = await _unitOfWork.StudentRepository.GetAllAsync();
 
              if (allStudent == null)
              {
@@ -88,7 +90,7 @@ namespace BLL.Services
 
         public async Task<bool> IsNameExit(string name)
         {
-            var student = await _studentRepository.GetAAsync(x => x.Name == name);
+            var student = await _unitOfWork.StudentRepository.GetAAsync(x => x.Name == name);
             if (student != null)
             {
                 return false;
@@ -98,7 +100,7 @@ namespace BLL.Services
 
         public async Task<bool> IsRollExit(string roll)
         {
-            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            var student = await _unitOfWork.StudentRepository.GetAAsync(x => x.Roll == roll);
             if (student != null)
             {
                 return false;
@@ -110,7 +112,7 @@ namespace BLL.Services
         public async Task<Student> UpdateAsync(string roll, StudentUpdateRequest request)
         {
 
-            var student = await _studentRepository.GetAAsync(x => x.Roll == roll);
+            var student = await _unitOfWork.StudentRepository.GetAAsync(x => x.Roll == roll);
 
             if (student == null)
             {
@@ -120,10 +122,10 @@ namespace BLL.Services
             student.Name = request.Name;
             student.Roll = request.Roll;
             student.Email = request.Email;
-            _studentRepository.UpdateAsync(student);
+            _unitOfWork.StudentRepository.UpdateAsync(student);
            
 
-            if (await _studentRepository.ApplicationSaveChanges())
+            if (await _unitOfWork.ApplicationSaveChanges())
             {
                 return student;
             }

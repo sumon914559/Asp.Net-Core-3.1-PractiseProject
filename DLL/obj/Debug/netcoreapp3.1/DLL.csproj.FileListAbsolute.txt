@@ -7,3 +7,4 @@ C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.dl
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.pdb
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.runtimeconfig.json
 C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\bin\Debug\netcoreapp3.1\DLL.runtimeconfig.dev.json
+C:\Users\sumon\Desktop\dotNet\ProjectPractise\DLL\obj\Debug\netcoreapp3.1\DLL.csprojAssemblyReference.cache
