@@ -14,6 +14,7 @@ namespace BLL.Request
         public string Name { get; set; }
         public string Roll { get; set; }
         public string Email { get; set; }
+        public int DepartmentId { get; set; }
     }
 
     public class StudentRequestValidator : AbstractValidator<StudentRequest>
@@ -25,6 +26,7 @@ namespace BLL.Request
 
             RuleFor(x=>x.Roll).NotEmpty().NotNull().MustAsync(RollExits).WithMessage("Roll Aleady exits.");
             RuleFor(x => x.Name).NotEmpty().NotNull().MustAsync(NameExits).WithMessage("Name Aleady exits.");
+            RuleFor(x => x.DepartmentId).NotEmpty().NotNull();
         }
 
         private async Task<bool> NameExits(string name, CancellationToken cancellationToken)

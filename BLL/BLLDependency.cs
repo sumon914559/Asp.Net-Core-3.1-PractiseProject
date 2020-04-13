@@ -14,7 +14,8 @@ namespace BLL
         {
             services.AddTransient<IDepartmentServices, DepartmentServices>();
             services.AddTransient<IStudentService, StudentService>();
-
+            services.AddTransient<IAccountService, AccountService>();
+                
 
             AllValidationDependency(services);
            

@@ -4,19 +4,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DLL.DbContext
 {
-    public class ApplicationDbContext: Microsoft.EntityFrameworkCore.DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>,  IdentityRoleClaim<int>,  IdentityUserToken<int>>
     {
-        public ApplicationDbContext(DbContextOptions options):base(options)
-        {
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public ApplicationDbContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) :base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
         }
         private static readonly MethodInfo _propertyMethod = typeof(EF).GetMethod(nameof(EF.Property), BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(typeof(bool));
         private const string IsDeletedProperty = "IsDeleted";
@@ -46,6 +53,7 @@ namespace DLL.DbContext
 
         private void BeforeSaveChanges()
         {
+            var userEmail =  GetCurrentUserEmail();
             var entries = ChangeTracker.Entries();
             foreach (var entity in entries)
             {
@@ -58,9 +66,12 @@ namespace DLL.DbContext
                         case EntityState.Added:
                             trackable.CreatedAt = nowTime;
                             trackable.UpdatedAt = nowTime;
+                            trackable.CreatedBy = userEmail;
+                            trackable.UpdatedBy = userEmail;
                             break;
                         case EntityState.Modified:
                             trackable.UpdatedAt = nowTime;
+                            trackable.UpdatedBy = userEmail;
                             break;
                         case EntityState.Deleted:
                             entity.Property(IsDeletedProperty).CurrentValue = true;
@@ -71,6 +82,18 @@ namespace DLL.DbContext
                     }
                 }
             }
+        }
+
+        private string GetCurrentUserEmail()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null)
+            {
+                var email = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+                return email;
+            }
+
+            return null;
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())

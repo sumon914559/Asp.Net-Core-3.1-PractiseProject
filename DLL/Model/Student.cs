@@ -10,6 +10,7 @@ namespace DLL.Model
         public int StudentId { get; set; }
         public string Name { get; set; }
         public string Roll { get; set; }
+        public int DepartmentId { get; set; }
         public string Email { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public string CreatedBy { get; set; }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DLL.UnitOfWork;
 using Microsoft.VisualBasic;
 using Utility.Exceptions;
+using Microsoft.AspNetCore.Identity;
 
 namespace BLL.Services
 {
@@ -21,16 +22,50 @@ namespace BLL.Services
 
         Task<bool> IsCodeExit(string code);
         Task<bool> IsNameExit(string name);
+        Task UserReg();
     }
 
     public class DepartmentServices: IDepartmentServices
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
 
-        public DepartmentServices(IUnitOfWork unitOfWork)
+
+        public DepartmentServices(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+
+        public async Task UserReg()
+        {
+            var user = new AppUser()
+            {
+                UserName = "sumon4",
+                Email = "sumon4@yahoo.com"
+            };
+            var result = await _userManager.CreateAsync(user, password: "sumon..S44@");
+            if (result.Succeeded)
+            {
+                var role = await _roleManager.FindByNameAsync("staff");
+                if (role == null)
+                {
+                    await _roleManager.CreateAsync(new AppRole()
+                    { Name = "staff" });
+
+                }
+
+                await _userManager.AddToRoleAsync(user, role: "staff");
+
+            }
+
+        }
+
+
+
 
         public async Task<Department> AddDepartmentAsync(DepartmentInsertRequest request)
         {
@@ -171,5 +206,7 @@ namespace BLL.Services
 
             throw new MyApplicationExceptions("something went wrong");
         }
+
+
     }
 }

@@ -12,6 +12,7 @@ namespace BLL.Request
         public string Name { get; set; }
         public string Roll { get; set; }
         public string Email { get; set; }
+        public int DepartmentId { get; set; }
     }
 
   public class StudentUpdateRequestValidator : AbstractValidator<StudentUpdateRequest>
@@ -23,6 +24,7 @@ namespace BLL.Request
             RuleFor(x => x.Name).NotEmpty().NotNull().MinimumLength(4);
             RuleFor(x => x.Roll).NotEmpty().NotNull();
             RuleFor(x => x.Email).NotEmpty().NotNull().EmailAddress();
+            RuleFor(x => x.DepartmentId).NotEmpty().NotNull();
         }
   }
 }
