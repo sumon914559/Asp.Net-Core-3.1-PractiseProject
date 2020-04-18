@@ -36,6 +36,20 @@ namespace API.Controllers
            return Ok("Enter Test1");
         }
 
+        [Authorize(Roles = "teacher", Policy = "AtToken")]
+        [HttpPost("logout")]
+        public async Task<ActionResult> LogOut()
+        {
+            var tt = User;
+            return Ok(await _accountService.LogOut(tt));
+        }
+
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult> RefreshToken(RefreshTokenRequest request)
+        {
+            return Ok(await _accountService.RefreshToken(request.token));
+        }
+
         [Authorize]
         [HttpGet("test2")]
         public ActionResult Test2()

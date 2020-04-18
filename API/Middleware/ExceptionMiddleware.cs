@@ -59,6 +59,12 @@ namespace API.Middleware
                         error.statusCode = (int)HttpStatusCode.NotFound;
                         break;
                     }
+                case UnauthorizedAccessException unauthorizedAccessException:
+                    {
+                         error.statusCode = (int)HttpStatusCode.Unauthorized;
+                         error.Message = "You are not Authorized";
+                         break;
+                    }
                 default:
                     {
                         break;

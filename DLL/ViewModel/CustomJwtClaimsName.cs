@@ -9,5 +9,6 @@ namespace DLL.ViewModel
         public static string UserName = "userName";
 
         public static string Email = "email";
+       
     }
 }
